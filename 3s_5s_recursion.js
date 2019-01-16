@@ -10,7 +10,7 @@ const findNumber = function(numberToFind){
     }
   }
 
-  return find(1, 1);
+  return find(1, "1");
 }
 
-console.log(findNumber(18));
+console.log(findNumber(13));
