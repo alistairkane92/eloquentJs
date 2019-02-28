@@ -13,22 +13,15 @@ const byName = (array) => {
   return result;
 }
 
-const ancestorsWithMothers = data.filter(p => !!p.mother)
-const ancestorsWithMothersByName = byName(ancestorsWithMothers);
+const getAgeDifferences = (array, ancestry, f) => {
+  const birthingAges = (acc, person) => {
+    if (!ancestry[person.mother]) return acc;
+    const ageDifference = person.born - ancestry[person.mother].born;
+    acc.push(ageDifference);
+    return acc;
+  }
 
-const ancestorsWithMotherData = data.filter(p => !!ancestorsWithMothersByName[p.mother])
-
-const childMother = (array, ancestry) => {
-  const obj = {};
-  array.forEach(p => obj[p.name] = ancestry[p.mother]);
-  return obj;
+  return f(array.reduce(birthingAges, []));
 }
 
-const motherOf = childMother(ancestorsWithMotherData, ancestorsWithMothersByName);
-
-const ageDifferences = array => array.map(p => {
-  return p.born - motherOf[p.name].born;
-})
-
-const avgBirthAge = average(ageDifferences(ancestorsWithMotherData));
-console.log(avgBirthAge);
+console.log(getAgeDifferences(data, byName(data), average));
